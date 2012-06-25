@@ -1,0 +1,100 @@
+#! /bin/sh
+
+cfile=/tmp/t.c
+ofile=/tmp/t.o
+includes='#include<stdio.h>
+#include<errno.h>
+#include<assert.h>
+#include<ctype.h>
+#include<string.h>
+#include<sys/param.h>
+#include<sys/types.h>
+#include<sys/stat.h>
+#include<stdlib.h>
+#include<unistd.h>
+'
+cat <<eot! >$cfile
+$includes
+eot!
+${CC-cc} -E $cfile > $ofile
+(for i in $includes ; do echo $i ; done
+ grep -s '[^a-zA-Z0-9]strrchr *(' $ofile >/dev/null || \
+   echo 'extern char * strrchr(const char *, const char);'
+ grep -s '[^a-zA-Z0-9]strchr *(' $ofile >/dev/null || \
+   echo 'extern char * strchr(const char *, const char);'
+ grep -s '[^a-zA-Z0-9]link *(' $ofile >/dev/null || \
+   echo 'extern int link(char *, char *);'
+ grep -s '[^a-zA-Z0-9]unlink *(' $ofile >/dev/null || \
+   echo 'extern int unlink(char *);'
+ grep -s '[^a-zA-Z0-9]fprintf *(' $ofile >/dev/null || \
+   echo 'extern int fprintf(FILE *, char *, ...);'
+ grep -s '[^a-zA-Z0-9]printf *(' $ofile >/dev/null || \
+   echo 'extern int printf(char *, ...);'
+ grep -s '[^a-zA-Z0-9]fwrite *(' $ofile >/dev/null || \
+   echo 'extern int fwrite(char *, int, int, FILE *);'
+ grep -s '[^a-zA-Z0-9]fread *(' $ofile >/dev/null || \
+   echo 'extern int fread(char *, int, int, FILE *);'
+ grep -s '[^a-zA-Z0-9]fscanf *(' $ofile >/dev/null || \
+   echo 'extern int fscanf(FILE *, char *, ...);'
+ grep -s '[^a-zA-Z0-9]fseek *(' $ofile >/dev/null || \
+   echo 'extern int fseek(FILE *, long, int);'
+ grep -s '[^a-zA-Z0-9]fflush *(' $ofile >/dev/null || \
+   echo 'extern int fflush(FILE *);'
+ grep -s '[^a-zA-Z0-9]ungetc *(' $ofile >/dev/null || \
+   echo 'extern int ungetc(int, FILE *);'
+ grep -s '[^a-zA-Z0-9]fgetc *(' $ofile >/dev/null || \
+   echo 'extern int fgetc(FILE *);'
+ grep -s '[^a-zA-Z0-9]fputc *(' $ofile >/dev/null || \
+   echo 'extern int fputc(char, FILE *);'
+ grep -s '[^a-zA-Z0-9]fclose *(' $ofile >/dev/null || \
+   echo 'extern int fclose(FILE *);'
+ grep -s '[^a-zA-Z0-9]sprintf *(' $ofile >/dev/null || \
+   echo 'extern char * sprintf(char *, const char *, ...);'
+ grep -s '[^a-zA-Z0-9]tolower *(' $ofile >/dev/null || \
+   echo 'extern char tolower(char);'
+ grep -s '[^a-zA-Z0-9]mktemp *(' $ofile >/dev/null || \
+   echo 'extern char * mktemp(char *);'
+ grep -s '[^a-zA-Z0-9]time *(' $ofile >/dev/null || \
+   echo 'extern time_t time(time_t *);'
+ grep -s '[^a-zA-Z0-9]perror *(' $ofile >/dev/null || \
+   echo 'extern void perror(char *);'
+ grep -s '[^a-zA-Z0-9]getopt *(' $ofile >/dev/null || \
+   echo 'extern int getopt(int, char **, const char *);'
+ grep -s '[^a-zA-Z0-9]memcpy *(' $ofile >/dev/null || \
+   echo 'extern void memcpy(char *, char *, int);'
+ grep -s '[^a-zA-Z0-9]memset *(' $ofile >/dev/null || \
+   echo 'extern void memset(char *, const int, const int);'
+ grep -s '[^a-zA-Z0-9]getcwd *(' $ofile >/dev/null || \
+   echo 'extern char * getcwd(char *, int);'
+ grep -s '[^a-zA-Z0-9]fork *(' $ofile >/dev/null || \
+   echo 'extern int fork(void);'
+ grep -s '[^a-zA-Z0-9]execlp *(' $ofile >/dev/null || \
+   echo 'extern int execlp(const char *, const char *, ...);'
+ grep -s '[^a-zA-Z0-9]waitpid *(' $ofile >/dev/null || \
+   echo 'extern int waitpid(const int, int *, const int);'
+ grep -s '[^a-zA-Z0-9]strlen *(' $ofile >/dev/null || \
+   echo 'extern int strlen(const char *);'
+ grep -s '[^a-zA-Z0-9]strcpy *(' $ofile >/dev/null || \
+   echo 'extern char * strcpy(char *, const char *);'
+) > sysdefs.h
+
+
+# $Log: find-defs,v $
+# Revision 1.1.1.1  2006-01-08 19:56:46  rclayton
+# Created
+#
+# Revision 1.1  2005/05/12 08:26:59  rclayton
+# Created.
+#
+# Revision 1.1.1.1  2004/11/14 03:45:07  rclayton
+# Created.
+#
+# Revision 1.1.1.1  2004/11/06 02:47:11  rclayton
+# Created.
+#
+# Revision 1.1.1.1  2004/11/05 23:22:41  rclayton
+# Created.
+#
+# Revision 1.1  2004/11/05 23:21:43  rclayton
+# Initial revision
+#

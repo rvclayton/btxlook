@@ -1,0 +1,52 @@
+: 
+/tmp/tst.bib
+@InProceedings{ui,
+  author       = "Simon S. Lam"#&#"A. Udaya Shankar",
+  title        = "Understanding Interfaces",
+  booktitle    = "Proceedings of the IFIP TC6/WG6.1 Fourth International
+		  Conference on Formal Description Techniques for Distributed
+		  Systems and Communication Protocols (FORTE '91)",
+  year         = 1991,
+  editor       = "K. R. Parker and G. A. Rose",
+  pages        = "165--184",
+  publisher    = nh,
+  address      = "Sidney, Australia",
+  month        = "19--22 November",
+  location     = "QA 76.6.I185 1991"
+}
+
+: 
+: 
+/tmp/tst.bib
+@article{ghtepd,
+  author	= "Jeff Conklin and Michael~L. Begeman",
+  title		= "{gIBIS:} A Hypertext Tool for Exploratory Policy
+		   Discussion",  
+  journal	= tois,
+  year		= "1988",
+  volume	= "6",
+  number	= "4",
+  pages		= "303--331",
+  month		= "October",
+  keywords	= "hypertext, design deliberations, collaborative
+		   construction."
+}
+
+: 
+/tmp/tst.bib
+@InProceedings{ui,
+  author       = "Simon S. Lam"#&#"A. Udaya Shankar",
+  title        = "Understanding Interfaces",
+  booktitle    = "Proceedings of the IFIP TC6/WG6.1 Fourth International
+		  Conference on Formal Description Techniques for Distributed
+		  Systems and Communication Protocols (FORTE '91)",
+  year         = 1991,
+  editor       = "K. R. Parker and G. A. Rose",
+  pages        = "165--184",
+  publisher    = nh,
+  address      = "Sidney, Australia",
+  month        = "19--22 November",
+  location     = "QA 76.6.I185 1991"
+}
+
+: 

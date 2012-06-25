@@ -1,0 +1,20 @@
+ 4 Jul 96  Non-default numeric arguments to btxlook-search override automatic
+           citation insertion.
+
+14 Dec 95  Have makefile.in call ./find-defs instead of find-defs
+
+11 May 95  Index the string name along with the string.
+
+23 Apr 95  Added btxlook-update to btxlook.el.
+
+14 Apr 95  Have btxindex accept string names not starting with a letter or
+	   digit. 
+	
+13 Apr 95  Replace soelim in the man page target in makefile.in.
+
+11 Apr 95  Have configure look for btxlook.c instead of RCS/btxlook.c,v to
+           confirm it's in the source directory.
+
+	   Defined yyerror() in cls.y; delete liby.a from the makefile.
+
+24 Mar 95  Initial release.

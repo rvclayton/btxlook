@@ -1,0 +1,125 @@
+# Edits made to this file will be overwritten the next time configure is run.
+# Edit makefine.in instead.
+#
+# The all, test, install, and clean targes are written to work with any make.
+# The other targets are written to work with gnu make.
+
+# prefix  The common root of all the following directories.
+# bindir  Where the btxlook and btxindex executibles go.
+# manext  The extension for the man pages.
+# mandir  The directory where the man pages go.
+# eldir   The directory where btxlook.el goes.
+#
+# The directories should exist; install doesn't make them if they don't.
+
+prefix		= @prefix@
+bindir		= $(prefix)/bin
+manext		= 1
+mandir		= $(prefix)/man/man$(manext)
+eldir		= $(prefix)/lib/emacs/site-lisp
+
+# The things above are more likely to need editing.  The things below are
+# less likely to need editing.
+
+YACC		= @YACC@
+cc		= @CC@
+CC		= $(cc) @undo_memcpy@
+CLDFLAGS	= @g_flag@
+CFLAGS		= $(CLDFLAGS) @gcc_cflags@ @MOREPATH@
+
+.SUFFIXES	: .man .$(manext)
+.man.$(manext)	: 
+		  cat common.man $*.man | \
+		  sed 's/[$$]Date: \([^ ]*\).*[$$]/\1/' >$@
+
+LEX		= @LEX@
+
+.SUFFIXES	: .rcl
+.rcl.o		:
+		  $(LEX) -t > $*.c -Prcf $*.rcl
+		  $(CC) -c -o $@ $(CLDFLAGS) $*.c
+		  rm $*.c
+
+INSTALL		= @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_DATA	= @INSTALL_DATA@
+
+all		: btxlook btxindex btxlook.$(manext) btxindex.$(manext)
+
+btxlook.objs	= btxlook.o common.o sblock.o bblock.o clt.o cls.o bl-file.o
+btxlook		: $(btxlook.objs)
+		  $(CC) -o $@ $(CLDFLAGS) $(btxlook.objs)
+
+btxindex.objs	= btxindex.o common.o sblock.o bi-file.o string-table.o
+btxindex	: $(btxindex.objs)
+		  $(CC) -o $@ $(CLDFLAGS) $(btxindex.objs)
+
+install		: btxlook btxindex btxindex.$(manext) btxlook.$(manext) \
+		  btxlook.el
+		  $(INSTALL_DATA) btxlook.$(manext) $(mandir)
+		  $(INSTALL_DATA) btxindex.$(manext) $(mandir)
+		  $(INSTALL_DATA) btxlook.el $(eldir)
+	          $(INSTALL_PROGRAM) btxlook $(bindir)
+	          $(INSTALL_PROGRAM) btxindex  $(bindir)
+
+clt.o		: clt.l
+		  $(LEX) -t > $*.c clt.l
+		  $(CC) -c -o $@ $(CLDFLAGS) $*.c
+
+cls.o		: cls.c
+		  $(CC) -c -o $@ $(CLDFLAGS) $*.c
+
+cls.h cls.c	: cls.y
+		  $(YACC) -d cls.y
+		  mv y.tab.c cls.c
+		  mv y.tab.h cls.h
+
+sysdefs.h	: find-defs
+		  CC=$(cc) ./find-defs
+
+tar		: Makefile.in configure find-defs btxlook.man btxindex.man \
+		  common.man bblock.c bi-file.rcl bl-file.rcl btxindex.c \
+		  btxlook.c cls.y clt.l common.c sblock.c string-table.c \
+		  bblock.h bl-common.h common.h sblock.h string-table.h \
+		  btxlook.el install-sh Readme History tst/Makefile.in \
+		  tst/tst.bib tst/tst.out
+		  sed "s/@date@/`date +'%y %h %d'`/" < Readme >readme
+		  rm -f Readme
+		  mv readme Readme
+		  chmod -w Readme
+		  tar cf btxlook-`date +%y%h%d | tr 'A-Z' 'a-z'`.tar $^
+
+test		: btxindex btxlook
+		  @cd tst ; $(MAKE) -s
+
+clean		:
+		  rm -rf *.o *.$(manext) cls.[hc] *~ clt.c *-rcfile.c \
+		         btxindex btxlook
+		  rcsclean
+
+bblock.o	: bblock.c bblock.h
+bi-rcfile.o     : bi-rcfile.l common.h sblock.h sysdefs.h
+bl-rcfile.o     : bl-rcfile.l common.h sblock.h sysdefs.h
+btxindex.o	: btxindex.c common.h sysdefs.h sblock.h string-table.h
+btxlook.o	: btxlook.c bl-common.h common.h sysdefs.h sblock.h bblock.h
+cls.o		: cls.c bl-common.h common.h sysdefs.h sblock.h bblock.h
+clt.o		: clt.c bl-common.h common.h sysdefs.h sblock.h bblock.h cls.h
+common.o	: common.c common.h sysdefs.h sblock.h
+sblock.o	: sblock.c common.h sysdefs.h sblock.h
+string-table.o	: string-table.c common.h sysdefs.h sblock.h string-table.h
+btxindex.1	: common.man btxindex.man
+btxlook.1	: common.man btxlook.man
+
+# $Log: Makefile.in,v $
+# Revision 1.1.1.1  2006-01-08 19:56:46  rclayton
+# Created
+#
+# Revision 1.1  2005/05/12 08:26:55  rclayton
+# Created.
+#
+# Revision 1.1.1.1  2004/11/14 03:45:07  rclayton
+# Created.
+#
+# Revision 1.1  2004/11/06 13:55:26  rclayton
+# Created by renaming makefile.in.
+#

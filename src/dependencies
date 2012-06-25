@@ -1,0 +1,14 @@
+btxindex.o: btxindex.c common.h sysdefs.h $(HOME)/lib/c/sblock.h \
+  string-table.h
+btxlook.o: btxlook.c bl-common.h common.h sysdefs.h \
+  $(HOME)/lib/c/sblock.h $(HOME)/lib/c/bblock.h
+cls.o: cls.c bl-common.h common.h sysdefs.h $(HOME)/lib/c/sblock.h \
+  $(HOME)/lib/c/bblock.h
+clt.o: clt.c bl-common.h common.h sysdefs.h $(HOME)/lib/c/sblock.h \
+  $(HOME)/lib/c/bblock.h cls.h
+common.o: common.c common.h sysdefs.h $(HOME)/lib/c/sblock.h
+string-table.o: string-table.c common.h sysdefs.h \
+  $(HOME)/lib/c/sblock.h string-table.h
+yy-input.o: yy-input.c yy-input.h $(HOME)/lib/c/read-line.h \
+  $(HOME)/lib/c/catenate-sblock.h $(HOME)/lib/c/sblock.h \
+  $(HOME)/lib/c/expand-str.h

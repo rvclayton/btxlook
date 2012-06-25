@@ -1,0 +1,27 @@
+.\" $Revision: 1.1.1.1 $ $Date: 2006-01-08 19:56:46 $
+.if t .ds Te T\\h'-0.1667m'\\v'0.20v'E\\v'-0.20v'\\h'-0.125m'X
+.if n .ds Te TeX
+.if t .ds Bi B\s-2IB\s+2\*(Te
+.if n .ds Bi BibTeX
+.if t .ds Lq \&``
+.if n .ds Lq \&"
+.if t .ds Rq \&''
+.if n .ds Rq \&"
+.\" 
+.ds BI \fBbtxindex\fP
+.ds BL \fBbtxlook\fP
+.\" Typeset option $1 with argument $2 and trailing matter $3.
+.de OP
+\\fI[\\fP\c
+.if !'\\$1''\{\\fB\\-\\$1\\fP\c
+.if !'\\$2''\\& \}\c
+\\fI\\$2]\\fP\\$3
+..
+.\" Extract the revision number from an rcs revision stamp.
+.de RN
+.ds RN \\$2
+..
+.\" Extract the revision date from an rcs date stamp.
+.de RD
+.ds RD \\$2
+..

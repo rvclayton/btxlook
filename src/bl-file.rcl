@@ -1,0 +1,113 @@
+%{
+# include "yy-common.h"
+
+# define YY_DECL \
+    int do_rcfile(char ** bixdirsp, int * updatep, int * plevel, char * pager)
+
+# define errm(_m) \
+    _errm(_m, btxlookrc)
+%}
+
+%x dopt sopt popt
+
+space		[ \t\n]
+notspace	[^ \t\n]
+
+%%
+
+%{
+  rcfin = open_rcfile("btxlook");
+  if (rcfin == NULL) return;
+%}
+
+{space}* { }
+
+"-d" {
+  BEGIN(dopt);
+  }
+
+"-p" {
+  BEGIN(popt);
+  }
+
+"-s" {
+  BEGIN(sopt);
+  }
+
+"-u" {
+  *updatep = 1;
+  }
+
+"-". {
+  errm("\"%s\" is an unknown option");
+  }
+
+{notspace}* {
+  errm("\"%s\" is an unknown word");
+  }
+
+
+<dopt>{space}* { }
+
+<dopt>{notspace}* {
+  copy_str(rcftext, pager);
+  BEGIN(INITIAL);
+  }
+
+<dopt><<EOF>> {
+  errm("missing argument for -d option");
+  BEGIN(INITIAL);
+  }
+
+
+<popt>{space}* { }
+
+<popt>{notspace}* {
+  *plevel = atoi(rcftext);
+  BEGIN(INITIAL);
+  }
+
+<popt><<EOF>> {
+  errm("missing argument for -v option");
+  BEGIN(INITIAL);
+  }
+
+
+<sopt>{space}* { }
+
+<sopt>{notspace}* {
+  copy_rcftext(bixdir);
+  *bixdirsp = bixdir_buffer;
+  BEGIN(INITIAL);
+  }
+
+<sopt><<EOF>> {
+  errm("missing argument for -s option");
+  BEGIN(INITIAL);
+  }
+
+
+%%
+
+int rcfwrap() { return 1; }
+
+/*
+Local Variables:
+mode: c
+End:
+
+
+$Log: bl-file.rcl,v $
+Revision 1.1.1.1  2006-01-08 19:56:46  rclayton
+Created
+
+Revision 1.1  2005/05/12 08:24:36  rclayton
+Created.
+
+Revision 1.1.1.1  2004/11/14 03:45:07  rclayton
+Created.
+
+Revision 1.2  2004/11/07 13:09:39  rclayton
+Extract common code into yy-input.h.
+
+*/

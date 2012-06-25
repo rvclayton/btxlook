@@ -1,0 +1,89 @@
+.TH BTXLOOK 1 "$Date: 2006-01-08 19:56:46 $" "Version 3.0"
+
+.SH NAME
+btxlook \- find entries in Bibtex bibliography files.
+
+.SH SYNOPSIS
+\*(BL
+.OP d pgm
+.OP p int
+.OP s dirs
+.OP u
+.OP "" bfile\fI[\fP\fB.bix\fP\fI]\fP .\|.\|.
+
+.SH DESCRIPTION
+\*(BL finds entries in the \*(Bi bibliography file \fIbfile\fP.bib by searching
+the associated index file \fIbfile\fP.bix created by \*(BI\|(1).  If no file
+names are given on the command line, \*(BL searches every index file it finds.
+\*(BL uses the directories given in the BIBINPUTS environment variable when
+finding index files; if BIBINPUTS isn't defined, \*(BL finds files only in the
+directory in which it is run.
+.PP
+Index files must exist and be up-to-date (that is, younger than the associated
+bibliography file); \*(BL ignores out-of-date index files.  A bibliography file
+need not be in the same directory as its index file, but the bibliography file
+must stay in the directory it was in when the index file was created.
+
+.SH OPTIONS
+.TP \w'\-pp'u
+.B \-d \fIpgm\fP
+Display matches using the program \fIpgm\fP.  The default is to use the program
+given in the PAGER environment variable, or to use \fBmore\fP\|(1) if PAGER
+isn't defined.  Repeated \fB\-d\fP options are not cumulative; all but the
+right-most option is ignored.
+
+.TP 
+.B \-p \fIint\fP
+Print messages from level \fIint\fP or below; \fIint\fP is an integer. For
+levels less than 1, print no messages; for level 1, print error messages; for
+level 2, print progress messages; for level 3, print statistics.  The default
+level is 1. Repeated \fB\-p\fP options are not cumulative; all but the
+right-most option is ignored.
+
+.TP
+.B \-s \fIdirs\fP
+Search through the directories given in \fIdirs\fP when looking for index
+files; \fIdirs\fP is a colon separated list of directories.  The default is to
+search though the directories given in the BIBINPUTS environment variable, or
+to search the current directory if BIBINPUTS isn't defined.  Repeated \fB\-s\fP
+options are not cumulative; all but the right-most option is ignored.
+
+.TP
+.B \-u
+Update out-of-date index files by calling \*(BI.  The default is to ignore
+out-of-date index files.
+
+.SH OPERATION
+When run, \*(BL repeatedly prompts for a list of words and returns all entries
+found containing all the words; the name of the bibliography file containing
+the entry precedes each entry.
+.PP
+A word consists of two or more letters and/or digits; one character words are
+neither indexed nor searched for. Letter case is ignored.  A non-alphanumeric
+character is replaced by a space; for example, if you type \*(LqO'Reilly\*(Rq,
+\*(BI searches for \*(Lqreilly\*(Rq (the apostrophe is turned into a space and
+the \*(LqO\*(Rq is dropped as a single character word).
+
+.SH FILES
+.TP  \w'\-pp'u
+$HOME\|/\|.btxlookrc
+.btxlookrc is read before the command line is processed and may contain any of
+the \*(BL command-line options.  Options given on the command line over-ride
+the same options given in this file.
+.PP
+The contents of .btxlookrc are run through shell expansion while being read;
+for example $HOME would be replaced by its definition.  Shell expansion does
+not include command-result replacement; for example, `pwd` and $(pwd)
+directives are not processed.  Errors that occur during shell expansion, such
+as undefined environment variables or attempts to perform command-result
+replacement, cause \*(BL to stop with an error.
+
+.SH "SEE ALSO"
+\*(BI\|(1), \fBbibtex\fP\|(1), \fBlatex\fP\|(1)
+
+.SH AUTHOR
+Jeff Erickson wrote \fBbiblook\fP; R. Clayton modified \fBbiblook\fP to create
+\*(BL.
+.PP
+This program is in the public domain.  You may use it or modify it to your
+heart's content, at your own risk.

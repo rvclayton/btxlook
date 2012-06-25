@@ -1,0 +1,73 @@
+.TH BTXINDEX 1 "$Date: 2006-01-08 19:56:46 $" "Version 3.0"
+.SH NAME
+btxindex \- create index files for Bibtex bibliography files.
+.SH SYNOPSIS
+\*(BI
+.\".OP o file .\|.\|.
+.OP p int
+.OP s dirs
+.OP w dir
+.OP "" bfile\fI[\fP\fB.bib\fP\fI]\fP .\|.\|.
+
+.SH DESCRIPTION
+\*(BI creates the index files used by \*(BL\|(1).  \*(BI reads the bibliography
+file \fIbfile\fP.bib and writes the index file \fIbfile\fP.bix; if no files are
+given, \*(BI indexes every bibliography file it finds.  \*(BI uses the
+directories given in the BIBINPUTS environment variable when searching for
+bibliography files; if BIBINPUTS isn't defined, \*(BI searches the directory in
+which it is run.
+
+.SH OPTIONS
+.TP \w'\-pp'u
+.B \-p \fIint\fP
+Print messages from level \fIint\fP or below; \fIint\fP is an integer. For
+levels less than 1, print no messages; for level 1, print error messages; for
+level 2, print progress messages; for level 3, print statistics.  The default
+level is 1.  Repeated \fB\-p\fP options are not cumulative; all but the
+right-most option is ignored.
+
+.TP
+.B \-s \fIdirs\fP
+Search through the directories given in \fIdirs\fP when looking for
+bibliography files; \fIdirs\fP is a colon separated list of directories.  The
+default is to search though the path list given in the BIBINPUTS environment
+variable, or to search the current directory if BIBINPUTS isn't defined.
+Repeated \fB\-s\fP options are not cumulative; all but the right-most option is
+ignored.
+
+.TP
+\fB\-w \fIdir\fP
+Write index files in directory \fIdir\fP.  The default is to write the index
+file in the directory containing the associated bibliography file. Repeated
+\fB\-w\fP options are not cumulative; all but the right-most option is ignored.
+
+.SH NOTES
+Reference keys are not indexed.
+.PP
+Both string names and the defined strings are indexed.
+
+.SH FILES
+.TP  \w'\-pp'u
+$HOME\|/\|.btxindexrc
+
+.btxindexrc is read before the command line is processed and should contain
+any of the \*(BI command-line options.  Options given on the command line
+over-ride the same options given in .btxindexrc.
+.PP
+The contents of .btxindexrc are run through shell expansion while being read;
+for example $HOME would be replaced by its definition.  Shell expansion does
+not include command-result replacement; for example, `pwd` and $(pwd)
+directives are not processed.  Errors that occur during shell expansion, such
+as undefined environment variables or attempts to perform command-result
+replacement, cause \*(BI to stop with an error.
+
+
+.SH "SEE ALSO"
+\*(BL\|(1), \fBbibtex\fP\|(1), \fBlatex\fP\|(1)
+
+.SH AUTHOR
+Jeff Erickson wrote \fBbibindex\fP;  R. Clayton modified \fBbibindex\fP to
+create \*(BI.
+.PP
+This program is in the public domain.  You may use it or modify it to your
+heart's content, at your own risk.

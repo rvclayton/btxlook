@@ -1,0 +1,115 @@
+%{
+# include "yy-common.h"
+
+# define YY_DECL \
+    int do_rcfile(char ** bibdirsp, char ** bixdirp, int * vlevel)
+
+# define errm(_m) \
+    _errm(_m, btxindexrc)
+
+  static char * bibdirs_buffer = NULL;
+  static int bibdirs_size = 0;
+%}
+
+%x sopt popt wopt
+
+space		[ \t\n]
+notspace	[^ \t\n]
+
+%%
+
+%{
+  yyin = open_rcfile("btxindex");
+  if (yyin == NULL) return;
+%}
+
+{space}* { }
+
+"-p" {
+  BEGIN(popt);
+  }
+
+"-s" {
+  BEGIN(sopt);
+  }
+
+"-w" {
+  BEGIN(wopt);
+  }
+
+"-". {
+  errm("\"%s\" is an unknown option");
+  }
+
+{notspace}* {
+  errm("\"%s\" is an unknown word");
+  }
+
+
+<popt>{space}* { }
+
+<popt>{notspace}* {
+  *vlevel = atoi(yytext);
+  BEGIN(INITIAL); 
+  }
+
+<popt><<EOF>> {
+  errm("missing argument for -v option");
+  BEGIN(INITIAL);
+  }
+
+
+<sopt>{space}* { }
+
+<sopt>{notspace}* {
+  copy_rcftext(bibdirs);
+  *bibdirsp = bibdirs_buffer;
+
+  BEGIN(INITIAL);
+  }
+
+<sopt><<EOF>> {
+  errm("missing argument for -s option");
+  BEGIN(INITIAL);
+  }
+
+
+<wopt>{space}* { }
+
+<wopt>{notspace}* {
+  copy_rcftext(bixdir);
+  *bixdirp = bixdir_buffer;
+
+  BEGIN(INITIAL); 
+  }
+
+<wopt><<EOF>> {
+  errm("missing argument for -w option");
+  BEGIN(INITIAL);
+  }
+
+%%
+
+
+int rcfwrap() { return 1; }
+
+/*
+Local Variables:
+mode: c
+End:
+
+
+$Log: bi-file.rcl,v $
+Revision 1.1.1.1  2006-01-08 19:56:46  rclayton
+Created
+
+Revision 1.1  2005/05/12 08:24:32  rclayton
+Created.
+
+Revision 1.1.1.1  2004/11/14 03:45:07  rclayton
+Created.
+
+Revision 1.2  2004/11/07 13:09:39  rclayton
+Extract common code into yy-input.h.
+
+*/
